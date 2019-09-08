@@ -39,7 +39,7 @@ namespace dnSpy.Disassembly.X86 {
 
 		public IX86DisassemblySettings Settings => x86DisassemblySettings;
 		public sealed override Guid ParentGuid => new Guid(AppSettingsConstants.GUID_DISASSEMBLER_CODESTYLE);
-		public sealed override object UIObject => this;
+		public sealed override object? UIObject => this;
 
 		public DisasmBooleanSetting UseHexNumbers { get; }
 		public DisasmBooleanSetting UpperCasePrefixes { get; }
@@ -171,7 +171,7 @@ namespace dnSpy.Disassembly.X86 {
 			return boolSetting;
 		}
 
-		void DisasmBooleanSetting_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+		void DisasmBooleanSetting_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
 			if (e.PropertyName == nameof(DisasmBooleanSetting.Disassembly))
 				return;
 			RefreshDisassembly();

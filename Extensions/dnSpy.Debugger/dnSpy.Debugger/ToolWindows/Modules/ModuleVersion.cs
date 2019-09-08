@@ -26,11 +26,11 @@ namespace dnSpy.Debugger.ToolWindows.Modules {
 		readonly string remaining;
 
 		public ModuleVersion(string versionString) {
-			if (versionString == null)
+			if (versionString is null)
 				versionString = string.Empty;
 			int index = GetEndIndex(versionString);
 			var verSubStr = index == versionString.Length ? versionString : versionString.Substring(0, index);
-			if (Version.TryParse(verSubStr, out version))
+			if (Version.TryParse(verSubStr, out version!))
 				remaining = index == versionString.Length ? string.Empty : versionString.Substring(index);
 			else {
 				remaining = versionString;

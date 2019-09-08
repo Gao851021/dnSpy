@@ -135,12 +135,6 @@
   <data name="DoubleClick" xml:space="preserve">
     <value>Doble Clic</value>
   </data>
-  <data name="EventAdderTreeNodeName" xml:space="preserve">
-    <value>añadir</value>
-  </data>
-  <data name="EventRemoverTreeNodeName" xml:space="preserve">
-    <value>eliminar</value>
-  </data>
   <data name="ExposedByTreeNode" xml:space="preserve">
     <value>Expuesto por</value>
   </data>
@@ -177,12 +171,6 @@
   <data name="Plugin_ShortDescription" xml:space="preserve">
     <value>Analiza ensamblados</value>
   </data>
-  <data name="PropertyGetterTreeNode" xml:space="preserve">
-    <value>get</value>
-  </data>
-  <data name="PropertySetterTreeNode" xml:space="preserve">
-    <value>set</value>
-  </data>
   <data name="RaisedByTreeNode" xml:space="preserve">
     <value>Levantado por</value>
   </data>
@@ -196,19 +184,22 @@
     <value>Buscando...</value>
   </data>
   <data name="ShiftDoubleClick" xml:space="preserve">
-    <value>Mayu+Doble Click</value>
+    <value>Shift+Doble Click</value>
   </data>
   <data name="ShortCutKeyCtrlC" xml:space="preserve">
     <value>Ctrl+C</value>
   </data>
   <data name="ShortCutKeyCtrlShiftR" xml:space="preserve">
-    <value>Ctrl+Mayu+R</value>
+    <value>Ctrl+Shift+R</value>
   </data>
   <data name="ShortCutKeyDelete" xml:space="preserve">
     <value>Eliminar</value>
   </data>
   <data name="ShowMetadataTokensCommand" xml:space="preserve">
     <value>Mostrar Tokens</value>
+  </data>
+  <data name="SingleClickExpandNodes" xml:space="preserve">
+    <value>Con un solo clic expande los nodos</value>
   </data>
   <data name="SyntaxHighlightCommand" xml:space="preserve">
     <value>Resaltar sintaxis</value>
@@ -217,6 +208,6 @@
     <value>Utilizado por</value>
   </data>
   <data name="UsesTreeNode" xml:space="preserve">
-    <value>Utiliza</value>
+    <value>Usos</value>
   </data>
 </root>

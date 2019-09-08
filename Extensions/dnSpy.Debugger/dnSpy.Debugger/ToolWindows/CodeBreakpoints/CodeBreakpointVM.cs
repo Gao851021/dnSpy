@@ -42,8 +42,8 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 			}
 		}
 
-		public string ErrorToolTip => errorToolTip;
-		string errorToolTip;
+		public string? ErrorToolTip => errorToolTip;
+		string? errorToolTip;
 
 		public ImageReference ImageReference => BreakpointImageUtilities.GetImage(breakpointKind);
 
@@ -79,8 +79,8 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 			BreakpointLocationFormatter.PropertyChanged += DbgBreakpointLocationFormatter_PropertyChanged;
 		}
 
-		internal static ReadOnlyCollection<string> CreateLabelsCollection(string s) =>
-			new ReadOnlyCollection<string>(s.Split(new[] { CodeBreakpointFormatter.LabelsSeparatorChar }, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()).ToArray());
+		internal static ReadOnlyCollection<string> CreateLabelsCollection(string? s) =>
+			new ReadOnlyCollection<string>((s ?? string.Empty).Split(new[] { CodeBreakpointFormatter.LabelsSeparatorChar }, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()).ToArray());
 
 		// UI thread
 		internal string GetLabelsString() {
@@ -94,7 +94,7 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 		void UI(Action callback) => Context.UIDispatcher.UI(callback);
 
 		// random thread
-		void DbgBreakpointLocationFormatter_PropertyChanged(object sender, PropertyChangedEventArgs e) =>
+		void DbgBreakpointLocationFormatter_PropertyChanged(object? sender, PropertyChangedEventArgs e) =>
 			UI(() => DbgBreakpointLocationFormatter_PropertyChanged_UI(e.PropertyName));
 
 		// UI thread
@@ -160,9 +160,9 @@ namespace dnSpy.Debugger.ToolWindows.CodeBreakpoints {
 		}
 
 		static bool LabelsEquals(ReadOnlyCollection<string> a, ReadOnlyCollection<string> b) {
-			if (a == null)
+			if (a is null)
 				a = emptyLabels;
-			if (b == null)
+			if (b is null)
 				b = emptyLabels;
 			if (a == b)
 				return true;

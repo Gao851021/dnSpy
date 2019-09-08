@@ -31,7 +31,7 @@ using dnSpy.Debugger.Evaluation.ViewModel;
 
 namespace dnSpy.Debugger.ToolWindows.Locals {
 	sealed class LocalsVariablesWindowValueNodesProvider : VariablesWindowValueNodesProvider {
-		public override event EventHandler NodesChanged;
+		public override event EventHandler? NodesChanged;
 		readonly DbgObjectIdService dbgObjectIdService;
 		readonly DebuggerSettings debuggerSettings;
 		bool forceRecreateAllNodes;
@@ -52,7 +52,7 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			}
 		}
 
-		void DebuggerSettings_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+		void DebuggerSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e) {
 			switch (e.PropertyName) {
 			case nameof(DebuggerSettings.SortParameters):
 			case nameof(DebuggerSettings.SortLocals):
@@ -67,7 +67,7 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			}
 		}
 
-		void DbgObjectIdService_ObjectIdsChanged(object sender, EventArgs e) => NodesChanged?.Invoke(this, EventArgs.Empty);
+		void DbgObjectIdService_ObjectIdsChanged(object? sender, EventArgs e) => NodesChanged?.Invoke(this, EventArgs.Empty);
 
 		sealed class DbgObjectIdComparer : IComparer<DbgObjectId> {
 			public static readonly DbgObjectIdComparer Instance = new DbgObjectIdComparer();
@@ -75,9 +75,9 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			public int Compare(DbgObjectId x, DbgObjectId y) {
 				if (x == y)
 					return 0;
-				if (x == null)
+				if (x is null)
 					return -1;
-				if (y == null)
+				if (y is null)
 					return 1;
 				return x.Id.CompareTo(y.Id);
 			}
@@ -98,7 +98,7 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			var recreateAllNodes = forceRecreateAllNodes;
 			forceRecreateAllNodes = false;
 
-			const CultureInfo cultureInfo = null;
+			const CultureInfo? cultureInfo = null;
 			var exceptions = language.ExceptionsProvider.GetNodes(evalInfo, nodeEvalOptions);
 			var returnValues = debuggerSettings.ShowReturnValues ? language.ReturnValuesProvider.GetNodes(evalInfo, nodeEvalOptions) : Array.Empty<DbgValueNode>();
 			var variables = language.LocalsProvider.GetNodes(evalInfo, nodeEvalOptions, GetLocalsValueNodeOptions());
@@ -142,7 +142,7 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			return new ValueNodesProviderResult(res, recreateAllNodes);
 		}
 
-		DbgLocalsValueNodeInfo[] GetSortedVariables(DbgEvaluationInfo evalInfo, DbgLocalsValueNodeInfo[] variables, DbgValueFormatterOptions nameFormatterOptions, CultureInfo cultureInfo) {
+		DbgLocalsValueNodeInfo[] GetSortedVariables(DbgEvaluationInfo evalInfo, DbgLocalsValueNodeInfo[] variables, DbgValueFormatterOptions nameFormatterOptions, CultureInfo? cultureInfo) {
 			if (variables.Length <= 1)
 				return variables;
 
@@ -183,7 +183,7 @@ namespace dnSpy.Debugger.ToolWindows.Locals {
 			}
 		}
 
-		string GetName(DbgEvaluationInfo evalInfo, DbgStringBuilderTextWriter output, DbgValueNode valueNode, DbgValueFormatterOptions options, CultureInfo cultureInfo) {
+		string GetName(DbgEvaluationInfo evalInfo, DbgStringBuilderTextWriter output, DbgValueNode valueNode, DbgValueFormatterOptions options, CultureInfo? cultureInfo) {
 			output.Reset();
 			valueNode.FormatName(evalInfo, output, options, cultureInfo);
 			return output.ToString();
