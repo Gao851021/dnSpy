@@ -32,13 +32,42 @@ namespace dnSpy.Disassembly.Viewer.X86 {
 		const int HEXBYTES_COLUMN_BYTE_LENGTH = 10;
 
 		sealed class AsmReferenceFactory {
-			readonly Dictionary<(FormatterOutputTextKind kind, string value), AsmReference> dict = new Dictionary<(FormatterOutputTextKind kind, string value), AsmReference>();
+			readonly Dictionary<(FormatterOutputTextKind kind, string value), AsmReference> refDict = new Dictionary<(FormatterOutputTextKind kind, string value), AsmReference>();
+			readonly Dictionary<(Code code, string mnemonic, CpuidFeature[] cpuidFeatures), MnemonicReference> mnemonicDict = new Dictionary<(Code code, string mnemonic, CpuidFeature[] cpuidFeatures), MnemonicReference>(new MnemonicComparer());
+
+			sealed class MnemonicComparer : IEqualityComparer<(Code code, string mnemonic, CpuidFeature[] cpuidFeatures)> {
+				public bool Equals((Code code, string mnemonic, CpuidFeature[] cpuidFeatures) x, (Code code, string mnemonic, CpuidFeature[] cpuidFeatures) y) {
+					if (x.code != y.code)
+						return false;
+					if (x.mnemonic != y.mnemonic)
+						return false;
+					var xc = x.cpuidFeatures;
+					var yc = y.cpuidFeatures;
+					if (xc.Length != yc.Length)
+						return false;
+					for (int i = 0; i < xc.Length; i++) {
+						if (xc[i] != yc[i])
+							return false;
+					}
+					return true;
+				}
+
+				public int GetHashCode((Code code, string mnemonic, CpuidFeature[] cpuidFeatures) obj) =>
+					(int)obj.code ^ StringComparer.Ordinal.GetHashCode(obj.mnemonic);
+			}
 
 			public AsmReference Create(FormatterOutputTextKind kind, string value) {
 				var key = (kind, value);
-				if (!dict.TryGetValue(key, out var asmRef))
-					dict[key] = asmRef = new AsmReference(kind, value);
+				if (!refDict.TryGetValue(key, out var asmRef))
+					refDict[key] = asmRef = new AsmReference(kind, value);
 				return asmRef;
+			}
+
+			public MnemonicReference Create(in Instruction instruction, string mnemonic) {
+				var key = (instruction.Code, mnemonic, instruction.CpuidFeatures);
+				if (!mnemonicDict.TryGetValue(key, out var mnemonicRef))
+					mnemonicDict[key] = mnemonicRef = new MnemonicReference(instruction.Code, mnemonic, instruction.CpuidFeatures);
+				return mnemonicRef;
 			}
 		}
 
@@ -82,6 +111,33 @@ namespace dnSpy.Disassembly.Viewer.X86 {
 					output.Write(text, color);
 					break;
 				}
+			}
+
+			public override void WriteNumber(in Instruction instruction, int operand, int instructionOperand, string text, ulong value, NumberKind numberKind, FormatterOutputTextKind kind) {
+				var color = GetColor(kind);
+				const DisassemblyReferenceFlags flags = DisassemblyReferenceFlags.Local | DisassemblyReferenceFlags.NoFollow;
+				output.Write(text, GetValue(value, numberKind), flags, color);
+			}
+
+			static object GetValue(ulong value, NumberKind numberKind) {
+				switch (numberKind) {
+				case NumberKind.Int8:	return (sbyte)value;
+				case NumberKind.UInt8:	return (byte)value;
+				case NumberKind.Int16:	return (short)value;
+				case NumberKind.UInt16:	return (ushort)value;
+				case NumberKind.Int32:	return (int)value;
+				case NumberKind.UInt32:	return (uint)value;
+				case NumberKind.Int64:	return (long)value;
+				case NumberKind.UInt64:	return (ulong)value;
+				default:
+					Debug.Fail($"Unknown number kind: {numberKind}");
+					throw new ArgumentOutOfRangeException(nameof(numberKind), $"Unknown number kind: {numberKind}");
+				}
+			}
+
+			public override void WriteMnemonic(in Instruction instruction, string text) {
+				var color = GetColor(FormatterOutputTextKind.Mnemonic);
+				output.Write(text, refFactory.Create(instruction, text), DisassemblyReferenceFlags.Local, color);
 			}
 		}
 
@@ -279,7 +335,7 @@ namespace dnSpy.Disassembly.Viewer.X86 {
 						output.Write(" ", BoxedTextColor.Text);
 					}
 
-					formatter.Format(ref instr, formatterOutput);
+					formatter.Format(instr, formatterOutput);
 					output.Write(Environment.NewLine, BoxedTextColor.Text);
 				}
 			}
