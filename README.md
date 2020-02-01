@@ -1,33 +1,25 @@
-# dnSpy
+# dnSpy - [Latest release](https://github.com/0xd4d/dnSpy/releases) - [❤️ Donate](https://github.com/sponsors/0xd4d)
 
-dnSpy is a debugger and .NET assembly editor. You can use it to edit and debug assemblies even if you don't have any source code available.
+dnSpy is a debugger and .NET assembly editor. You can use it to edit and debug assemblies even if you don't have any source code available. Main features:
 
-Want to say thanks? Click the star at the top of the page. Or fork dnSpy and send a PR!
+- Debug .NET and Unity assemblies
+- Edit .NET and Unity assemblies
+- Light and dark themes
 
-The following pictures show dnSpy in action. It shows dnSpy editing and debugging a .NET EXE file, not source code.
+See below for more features
 
 ![debug-animated](images/debug-animated.gif)
 
 ![edit-code-animated](images/edit-code-animated.gif)
 
-# Features (see below for more detail)
+## Building
 
-- Debug .NET Framework, .NET Core and Unity game assemblies, no source code required
-- Edit assemblies in C# or Visual Basic or IL, and edit all metadata
-- Light and dark themes
-- Extensible, write your own extensions
-- High DPI support (per-monitor DPI-aware)
-- And much more, see below
-
-dnSpy uses the ILSpy decompiler engine and the Roslyn (C# / Visual Basic) compiler and many other open source libraries, see below for more info.
-
-# Binaries
-
-[Latest release](https://github.com/0xd4d/dnSpy/releases)
-
-Latest build: [![](https://github.com/0xd4d/dnSpy/workflows/GitHub%20CI/badge.svg)](https://github.com/0xd4d/dnSpy/actions)
-
-Or build it from source, see the [Wiki](https://github.com/0xd4d/dnSpy/wiki/Building-dnSpy).
+```PS
+git clone --recursive https://github.com/0xd4d/dnSpy.git
+cd dnSpy
+# or dotnet build
+./build.ps1 -NoMsbuild
+```
 
 # Debugger
 
